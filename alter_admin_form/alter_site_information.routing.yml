@@ -1,5 +1,5 @@
 alter_site_information.main_page_controller:
-  path: '/json/{node}'
+  path: '/json/{node}/{key}'
   defaults:
     _controller: '\Drupal\alter_site_information\Controller\MainPageController::mainPage'
     _title: 'Node Page'
