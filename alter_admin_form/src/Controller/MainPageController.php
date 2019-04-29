@@ -15,8 +15,8 @@ class MainPageController extends ControllerBase {
 	$config_key = $config->get('site_api_key');
     	$current_path = \Drupal::service('path.current')->getPath();
     	$current_path_explode = explode('/', $current_path);
-    	$path_nid = $current_path_explode[2];
-    	$path_key = $current_path_explode[3];
+    	$path_key = $current_path_explode[2];
+    	$path_nid = $current_path_explode[3];    	
     	$node = \Drupal\node\Entity\Node::load($path_nid);
 	$nid = $node->id();
 	$title = $node->getTitle();
@@ -33,3 +33,4 @@ class MainPageController extends ControllerBase {
 }
 
 ?>
+
