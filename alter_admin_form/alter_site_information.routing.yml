@@ -1,0 +1,7 @@
+alter_site_information.main_page_controller:
+  path: '/json/{node}'
+  defaults:
+    _controller: '\Drupal\alter_site_information\Controller\MainPageController::mainPage'
+    _title: 'Node Page'
+  requirements:
+    _permission: 'access content'
