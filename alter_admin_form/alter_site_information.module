@@ -5,44 +5,48 @@
  * Altering site information form.
  */
 
-use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\HttpFoundation\Request;
 
-// Here we have altered site information form.ss
+/**
+ * Implements hook_form_alter().
+ */
 function alter_site_information_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
-	if($form_id == 'system_site_information_settings'){
-		$config = \Drupal::service('config.factory')->getEditable('siteapikey.settings');
-		$form['site_api_key_information'] = [
-			  '#type' => 'fieldset',
-			  '#title' => 'API Key',
-			];
-		 $form['site_api_key_information']['site_api_key'] = [
-			  '#type' => 'textfield',
-			  '#title' => 'Site API Key',
-			  '#default_value' => $config->get('site_api_key'),
-			  '#placeholder' => t('No API Key Yet'),
-			];
-		$form['actions']['submit']['#value'] = t('Update Configuration');
-		foreach (array_keys($form['actions']) as $action) {
-			if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
-				$form['actions'][$action]['#submit'][] = 'alter_site_information_form_submit';
-			}
-		}
-	}
+  if ($form_id == 'system_site_information_settings') {
+    $config = \Drupal::service('config.factory')->getEditable('siteapikey.settings');
+    $form['site_api_key_information'] = [
+      '#type' => 'fieldset',
+      '#title' => 'API Key',
+    ];
+    $form['site_api_key_information']['site_api_key'] = [
+      '#type' => 'textfield',
+      '#title' => 'Site API Key',
+      '#default_value' => $config->get('site_api_key'),
+      '#placeholder' => t('No API Key Yet'),
+    ];
+    $form['actions']['submit']['#value'] = t('Update Configuration');
+    foreach (array_keys($form['actions']) as $action) {
+      if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+        $form['actions'][$action]['#submit'][] = 'alter_site_information_form_submit';
+      }
+    }
+  }
 }
 
-// In config, collection name "siteapikey.settings" is stored using site information form.
-function alter_site_information_form_submit(array $form, FormStateInterface $form_state){
-	$api_key_value = $form_state->getValue('site_api_key');
-	$config = \Drupal::service('config.factory')->getEditable('siteapikey.settings');
-	$config->set('site_api_key', $api_key_value);
-	$config->save();
-	drupal_set_message('Site API Key is set to :- '.$api_key_value);
+/**
+ * Implements hook_form_submit().
+ */
+function alter_site_information_form_submit(array $form, FormStateInterface $form_state) {
+  $api_key_value = $form_state->getValue('site_api_key');
+  $config = \Drupal::service('config.factory')->getEditable('siteapikey.settings');
+  $config->set('site_api_key', $api_key_value);
+  $config->save();
+  drupal_set_message('Site API Key is set to :- '.$api_key_value);
 }
 
-// Function to get nid and convert node to JSON
-function alter_site_information_json_node(){
-	$config = \Drupal::service('config.factory')->getEditable('siteapikey.settings');
-	print_r($config->get('site_api_key'));
+/**
+ * Implements hook_json_node() to get nid and convert node to JSON.
+ */
+function alter_site_information_json_node() {
+  $config = \Drupal::service('config.factory')->getEditable('siteapikey.settings');
+  print_r($config->get('site_api_key'));
 }

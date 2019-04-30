@@ -5,4 +5,3 @@ alter_site_information.main_page_controller:
     _title: 'Node Page'
   requirements:
     _permission: 'access content'
-
