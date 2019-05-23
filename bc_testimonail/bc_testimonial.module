@@ -1,0 +1,72 @@
+<?php
+
+use Drupal\Core\Breadcrumb\Breadcrumb;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Link;
+
+// hook_preprocess_html to attach library.
+function bc_testimonial_preprocess_html(&$variables) {
+  //Add a JS library
+  $variables['#attached']['library'][] = 'bc_testimonial/bc_testimonial-js';
+  $variables['#attached']['library'][] = 'bc_testimonial/bc_testimonial_1-js';
+  $variables['#attached']['library'][] = 'bc_testimonial/bc_testimonial-css';
+}
+
+/**
+ * Implements hook_system_breadcrumb_alter().
+ *
+ * Append node title to breadcrumb for certain content types and views that are 
+ * not in the menu.
+ *
+ * @param \Drupal\Core\Breadcrumb\Breadcrumb $breadcrumb
+ * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+ * @param array $context
+ */
+function bc_testimonial_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
+		$current_uri = \Drupal::request()->getRequestUri();
+		$current_uri_explode = explode('/', $current_uri);
+		$url_decode = urldecode($current_uri_explode[3]);
+		
+		if($current_uri_explode[2] == 'store-detail'){
+			if ($breadcrumb && !\Drupal::service('router.admin_context')->isAdminRoute()) {
+			$request = \Drupal::request();
+				if (preg_match('/view\./', $route_match->getRouteName())) {
+						$title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+						$view_id = \Drupal::routeMatch()->getMasterRouteMatch()->getParameter('view_id');
+						$breadcrumb->addLink(Link::createFromRoute($url_decode, '<nolink>'));
+						$breadcrumb->addCacheTags(['config:views.view.' . $view_id]);
+				}
+			}
+		   
+		  /*$replacement = str_replace(
+		  
+		  'Cargo Securement Handbook For Drivers - Product Details', 
+		  'Cargo Securement Handbook For Drivers' ,
+		  'Home - Product Details - Cargo Securement Handbook For Drivers - Product Details'
+		  );*/
+		  //$replacement = 'qq';
+
+		  //$links = $breadcrumb->getLinks();
+		  //$breadcrumb = new Breadcrumb();
+		  //$breadcrumb->setLinks($links);
+		  //print_r($links);exit;
+		  //$breadcrumb->addLink(Link::createFromRoute($replacement, '<nolink>'));
+		  
+
+		}else{
+			
+			if ($breadcrumb && !\Drupal::service('router.admin_context')->isAdminRoute()) {
+			$request = \Drupal::request();
+				if (preg_match('/view\./', $route_match->getRouteName())) {
+						$title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+						$view_id = \Drupal::routeMatch()->getMasterRouteMatch()->getParameter('view_id');
+						$breadcrumb->addLink(Link::createFromRoute($title, '<nolink>'));
+						$breadcrumb->addLink(Link::createFromRoute($url_decode, '<nolink>'));
+						$breadcrumb->addCacheTags(['config:views.view.' . $view_id]);
+				}
+			}
+		}
+
+	}
+
+?>

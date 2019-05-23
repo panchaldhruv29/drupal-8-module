@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.bc_testimonial.body
+    - node.type.bc_testimonial
+  module:
+    - text
+    - user
+    - image
+id: node.bc_testimonial.teaser
+targetEntityType: node
+bundle: bc_testimonial
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 100
+    region: content
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+  links:
+    weight: 101
+    region: content
+hidden: {  }

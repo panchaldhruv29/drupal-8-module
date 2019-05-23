@@ -1,0 +1,77 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.bc_testimonial.body
+    - field.field.node.bc_testimonial.field_bc_testimonial_job
+    - field.field.node.bc_testimonial.field_bc_testimonial_name
+    - field.field.node.bc_testimonial.field_bc_testimonial_video
+    - field.field.node.bc_testimonial.field_bc_testimonial_avatar
+    - field.field.node.bc_testimonial.field_feature_membership
+    - field.field.node.bc_testimonial.field_feature_quote
+    - node.type.bc_testimonial
+  module:
+    - image  
+    - path
+    - text
+id: node.bc_testimonial.default
+targetEntityType: node
+bundle: bc_testimonial
+mode: default
+content:
+  body:
+    type: text_textarea_with_summary
+    weight: 31
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+    third_party_settings: {  }
+  field_bc_testimonial_job:
+    weight: 121
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_bc_testimonial_name:
+    weight: 122
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_bc_testimonial_video:
+    weight: 122
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content  
+  field_bc_testimonial_avatar:
+    weight: 121
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+    region: content  
+  field_feature_membership:
+    weight: 121
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content  
+  field_feature_quote:
+    weight: 121
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content           
+hidden: {  }

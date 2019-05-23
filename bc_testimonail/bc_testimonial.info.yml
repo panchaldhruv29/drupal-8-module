@@ -1,0 +1,11 @@
+name: 'BC Testimonial'
+description: 'Provides BC Testimonial content type and related configuration. Use <em>BC Testimonial</em>. Custom block, menu, content type and slider functionality added in this module.'
+type: module
+core: 8.x
+dependencies:
+  - field
+  - node
+  - path
+  - rdf
+  - text
+  - user

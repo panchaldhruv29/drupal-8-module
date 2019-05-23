@@ -1,0 +1,7 @@
+bc_testimonial.feature_quotes:
+  path: '/feature-quote'
+  defaults:
+    _controller: '\Drupal\bc_testimonial\Controller\BcTestimonialController::feature_quotes'
+    _title: 'Feature on quotes & endorsements page'
+  requirements:
+    _permission: 'access content'

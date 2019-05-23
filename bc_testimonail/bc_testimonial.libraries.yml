@@ -1,0 +1,19 @@
+bc_testimonial-js:
+  version: 1.x
+  js:
+    js/jquery.flexslider.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+bc_testimonial_1-js:
+  version: 1.x
+  js:
+    js/test.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings    
+bc_testimonial-css:
+    version: 1.x
+    css:
+        theme:
+            css/flexslider.css: {}
