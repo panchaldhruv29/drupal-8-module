@@ -3,6 +3,37 @@
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Render\Markup;
+use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
+use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\block_content\Entity\BlockContent;
+use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\user\Entity\User;
+
+function bc_testimonial_block_content_view_alter(array &$build, BlockContent $custom_block) {	
+	if($custom_block->id() == 5){
+		$current_user = \Drupal::currentUser();
+		$user_custom = User::load(\Drupal::currentUser()->id());
+		$picture_name = $user_custom->get('field_user_picture')->entity->getFileUri();
+		if ($wrapper = \Drupal::service('stream_wrapper_manager')->getViaUri($picture_name)) {
+			$picture_name = $wrapper->getExternalUrl();
+		}
+		$build['content']['#markup'] = Markup::create('<div class="pull-right text-right">
+<ul class="inline topbar-link">
+	<li><a href="/about">About</a></li>
+	<li><a href="/industry/economy">Industry</a></li>
+	<li><a href="/careers/job-postings">Job Postings</a></li>
+	<li><a href="/members">Membership Dashboard</a></li>
+	<li><a href="/user/logout">Logout</a></li>
+	<li><a href="/bctrucking/user"><img alt="user_picture" src="'.$picture_name.'" /></a></li>
+	<li><a href="/cart"><img alt="cart" class="cartd_icon" data-align="center" data-entity-type="file" data-entity-uuid="f347a15a-1316-40b9-b505-2bc0ea8cf7d9" src="/sites/default/files/inline-images/cart.png" /></a></li>
+</ul>
+</div>'
+);
+	}  
+	
+}
+
 
 // hook_preprocess_html to attach library.
 function bc_testimonial_preprocess_html(&$variables) {
@@ -22,37 +53,34 @@ function bc_testimonial_preprocess_html(&$variables) {
  * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
  * @param array $context
  */
+
 function bc_testimonial_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
 		$current_uri = \Drupal::request()->getRequestUri();
 		$current_uri_explode = explode('/', $current_uri);
 		$url_decode = urldecode($current_uri_explode[3]);
-		
+
 		if($current_uri_explode[2] == 'store-detail'){
 			if ($breadcrumb && !\Drupal::service('router.admin_context')->isAdminRoute()) {
 			$request = \Drupal::request();
 				if (preg_match('/view\./', $route_match->getRouteName())) {
-						$title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
 						$view_id = \Drupal::routeMatch()->getMasterRouteMatch()->getParameter('view_id');
 						$breadcrumb->addLink(Link::createFromRoute($url_decode, '<nolink>'));
 						$breadcrumb->addCacheTags(['config:views.view.' . $view_id]);
 				}
 			}
-		   
-		  /*$replacement = str_replace(
-		  
-		  'Cargo Securement Handbook For Drivers - Product Details', 
-		  'Cargo Securement Handbook For Drivers' ,
-		  'Home - Product Details - Cargo Securement Handbook For Drivers - Product Details'
-		  );*/
-		  //$replacement = 'qq';
+		}elseif($current_uri_explode[2] == 'careers'){
 
-		  //$links = $breadcrumb->getLinks();
-		  //$breadcrumb = new Breadcrumb();
-		  //$breadcrumb->setLinks($links);
-		  //print_r($links);exit;
-		  //$breadcrumb->addLink(Link::createFromRoute($replacement, '<nolink>'));
-		  
-
+			if ($breadcrumb && !\Drupal::service('router.admin_context')->isAdminRoute()) {
+				$request = \Drupal::request();
+				$node = \Drupal::request()->get('node');
+				$types = ['job_posting'];
+			    // if the node is a type with no menu placement, attach a breadcrumb
+				if ($node && in_array($node->bundle(), $types)) {
+					$breadcrumb->addLink(Link::createFromRoute('Job Posting', '<nolink>'));
+					$breadcrumb->addCacheTags(['node:' . $node->id()]);
+				}
+			}
+			
 		}else{
 			
 			if ($breadcrumb && !\Drupal::service('router.admin_context')->isAdminRoute()) {
